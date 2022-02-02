@@ -12,6 +12,41 @@ headers = {
 }
 
 url = "https://evemaps.dotlan.net/system/"
+url_ali = "https://evemaps.dotlan.net/alliance/"
+
+
+def adm_compare(alliance):
+    sys_lst = get_ali_sys(alliance)
+    old_adm = []
+
+    for sys in sys_lst:
+        old_adm.append([sys, 0])
+
+    while True:
+        curr_amd = get_sys_adm(sys_lst)
+        for x in range(len(curr_amd)):
+            if old_adm[x][1] == curr_amd[x][1]:
+                pass
+            if old_adm[x][1] > curr_amd[x][1]:
+                print(f'AMD in system {old_adm[x][0]} DOWN')
+            if old_adm[x][1] < curr_amd[x][1]:
+                print(f'AMD in system {old_adm[x][0]} UP')
+        old_adm = curr_amd
+
+
+def get_ali_sys(alliance):
+    print('Scanning alliance')
+    sys_lst = []
+    s = requests.Session()
+
+    response = s.get(url=url_ali+alliance, headers=headers)
+    soup = BeautifulSoup(response.text, 'lxml')
+    sov_sys = soup.find_all('table')[2].find_all('tr')
+
+    for row in range(1, len(sov_sys)):
+        sys_lst.append(sov_sys[row].find_all('td')[2].find_all('a')[1].text)
+
+    return sys_lst
 
 
 def get_sys_adm(sys_lst):
@@ -32,41 +67,10 @@ def get_sys_adm(sys_lst):
     return curr_adm
 
 
-def adm_compare(sys_lst, old_adm):
-    while True:
-        curr_amd = get_sys_adm(sys_lst)
-        for x in range(len(curr_amd)):
-            if old_adm[x][1] == curr_amd[x][1]:
-                pass
-            if old_adm[x][1] > curr_amd[x][1]:
-                print(f'AMD in system {old_adm[x][0]} DOWN')
-            if old_adm[x][1] < curr_amd[x][1]:
-                print(f'AMD in system {old_adm[x][0]} UP')
-        old_adm = curr_amd
-
-
 def main():
-    sys_lst = ["A1-AUH",
-               "A5MT-B",
-               "JD-TYH",
-               "SN9S-N",
-               "02V-BK",
-               "R-ARKN",
-               "MS2-V8",
-               "DL-CDY",
-               "X-HISR",
-               "QS-530",
-               "VR-YRV",
-               "IPX-H5",
-               "29YH-V",
-               "LG-RO2"]
+    alliance = 'Red_Alliance'
 
-    old_adm = []
-    for sys in sys_lst:
-        old_adm.append([sys, 0])
-
-    while True:
-        adm_compare(sys_lst, old_adm)
+    adm_compare(alliance)
 
 
 if __name__ == "__main__":
