@@ -23,15 +23,15 @@ def adm_compare(alliance):
         old_adm.append([sys, 0])
 
     while True:
-        curr_amd = get_sys_adm(sys_lst)
-        for x in range(len(curr_amd)):
-            if old_adm[x][1] == curr_amd[x][1]:
+        curr_adm = get_sys_adm(sys_lst)
+        for x in range(len(curr_adm)):
+            if old_adm[x][1] == curr_adm[x][1]:
                 pass
-            if old_adm[x][1] > curr_amd[x][1]:
-                print(f'AMD in system {old_adm[x][0]} DOWN')
-            if old_adm[x][1] < curr_amd[x][1]:
-                print(f'AMD in system {old_adm[x][0]} UP')
-        old_adm = curr_amd
+            if old_adm[x][1] > curr_adm[x][1]:
+                print(f'ADM in system {old_adm[x][0]} DOWN')
+            if old_adm[x][1] < curr_adm[x][1]:
+                print(f'ADM in system {old_adm[x][0]} UP')
+        old_adm = curr_adm
 
 
 def get_ali_sys(alliance):
